@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FWE Pre-2 Games</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+      background:
+        radial-gradient(circle at top left, #dff4ff 0%, transparent 35%),
+        radial-gradient(circle at top right, #e8e0ff 0%, transparent 30%),
+        linear-gradient(180deg, #f7fbff 0%, #eef5ff 55%, #f9fbff 100%);
+      color: #2a3440;
+    }
+
+    .container {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 50px;
+    }
+
+    .hero {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 28px;
+      box-shadow: 0 18px 40px rgba(60, 90, 140, 0.12);
+      padding: 28px 22px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.1;
+      color: #24364d;
+      letter-spacing: 0.02em;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      font-size: 16px;
+      color: #5d6f83;
+    }
+
+    .top-info {
+      margin-top: 18px;
+      display: inline-block;
+      background: linear-gradient(135deg, #ffffff, #f4f8ff);
+      border: 1px solid #dce9ff;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 14px;
+      color: #506174;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 10px 0 16px;
+      color: #31445c;
+      padding-left: 4px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      position: relative;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(213, 228, 255, 0.95);
+      border-radius: 22px;
+      padding: 20px 16px 18px;
+      box-shadow: 0 10px 24px rgba(70, 95, 140, 0.09);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 7px;
+      background: linear-gradient(90deg, #7fc8ff, #a78bfa, #7ee7d9);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 30px rgba(70, 95, 140, 0.14);
+      border-color: #bfd8ff;
+    }
+
+    .day {
+      font-size: 27px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #23364d;
+    }
+
+    .label {
+      font-size: 14px;
+      color: #68809a;
+      margin-bottom: 10px;
+    }
+
+    .mini {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #517099;
+      background: #eef5ff;
+      border: 1px solid #d7e7ff;
+      border-radius: 999px;
+      padding: 5px 10px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 13px;
+      color: #728396;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        width: min(100% - 20px, 1100px);
+        padding-top: 18px;
+      }
+
+      .hero {
+        border-radius: 22px;
+        padding: 22px 14px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .card {
+        padding: 18px 12px 16px;
+        border-radius: 18px;
+      }
+
+      .day {
+        font-size: 22px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <h1>FWE Pre-2 Games</h1>
+      <div class="subtitle">Pre-2 Vocabulary Game Index</div>
+      <div class="top-info" id="topInfo">Loading...</div>
+    </header>
+
+    <div class="section-title">Day List</div>
+    <main class="grid" id="dayGrid"></main>
+
+    <div class="footer">
+      Fun With English
+    </div>
+  </div>
+
+  <script>
+    const totalDays = 30;
+
+    const days = Array.from({ length: totalDays }, (_, i) => ({
+      day: i + 1,
+      file: `https://nocci-lab.github.io/Pre-2_Vocab_Games/Pre-2_Day${i + 1}.html`
+    }));
+
+    const dayGrid = document.getElementById("dayGrid");
+    const topInfo = document.getElementById("topInfo");
+
+    topInfo.textContent = `Day 1 ～ Day ${totalDays} ｜ 全 ${totalDays} 個`;
+
+    days.forEach(item => {
+      const link = document.createElement("a");
+      link.className = "card";
+      link.href = item.file;
+      link.innerHTML = `
+        <div class="day">Day ${item.day}</div>
+        <div class="label">Vocabulary Game</div>
+        <span class="mini">Open</span>
+      `;
+      dayGrid.appendChild(link);
+    });
+  </script>
+</body>
+</html>
